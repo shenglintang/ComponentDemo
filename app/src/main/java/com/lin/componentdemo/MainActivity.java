@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //在组件1中发起跳转命令
+                //跳转命令
                 ARouter.getInstance()
                         .build("/comp1/Comp1MainActivity")
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
