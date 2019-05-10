@@ -1,0 +1,48 @@
+if (rootProject.ext.isModule) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+
+android {
+    compileSdkVersion rootProject.ext.versions.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.versions.minSdkVersion
+        targetSdkVersion rootProject.ext.versions.targetSdkVersion
+        versionCode rootProject.ext.versions.versionCode
+        versionName rootProject.ext.versions.versionName
+
+        //Arouter路由配置
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            if (rootProject.ext.isModule) {
+                manifest.srcFile 'src/main/java/com/lin/comp1/app/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/java/com/lin/comp1/library/AndroidManifest.xml'
+                java {//移除module包下的代码
+                    exclude 'module'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':common')
+    //arouter编译器插件，每个组件都需引入
+    annotationProcessor rootProject.ext.dependencies["arouter_compiler"]
+}
